@@ -2,11 +2,13 @@ class Streamer
 
   def play
     unless @process or not @track
-      Thread.new do
+      @thr = Thread.new do
         # raspbian
-        # @process = IO.popen('omxplayer -o both "$(youtube-dl -g "https://youtube.com/watch?v=' + @track.id.video_id + '" | sed -n \'2p\')"')
+        # @process = IO.popen('omxplayer -o both "$(youtube-dl -g "https://youtube.com/watch?v=' + @track[:id] + '" | sed -n \'2p\')"')
         # macOS
         @process = IO.popen("mpv \"$(youtube-dl -g \"https://youtube.com/watch?v=#{@track[:id]}\" | sed -n '2p')\"")
+        Process.waitpid(@process.pid)
+        play_next_track
       end
       "playing"
     end
@@ -14,10 +16,9 @@ class Streamer
   end
 
   def stop
-    if @process
-      Process.kill(0, @process.pid)
-      @process = nil
-    end
+    Process.kill(0, @process.pid) if @process
+    @thr.exit if @thr
+    @process = nil
   end
 
   def update_tracks(tracks = @track_list)
@@ -25,6 +26,12 @@ class Streamer
       @track_list = tracks
       @track = @track_list.shift
     end
+  end
+
+  def play_next_track
+    @process = nil
+    update_tracks
+    play
   end
 
 end

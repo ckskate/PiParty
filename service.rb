@@ -12,7 +12,7 @@ class Service
     max_results: 10).items
   end
 
-  def sanitize raw_results
+  def sanitize(raw_results)
     raw_results.reject do |result|
       result.kind != "youtube#video"
     end

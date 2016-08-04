@@ -4,7 +4,7 @@ require "sinatra/base"
 require_relative "streamer"
 require_relative "service"
 
-class PiStream < Sinatra::Base
+class PiParty < Sinatra::Base
 
   @@streamer = Streamer.new
   @@service = Service.new
