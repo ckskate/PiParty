@@ -1,13 +1,11 @@
 require "sinatra/base"
-# require "http"
-# require "json"
 require_relative "streamer"
 require_relative "service"
 
 class PiParty < Sinatra::Base
 
   @@streamer = Streamer.new
-  @@service = Service.new
+  @@service = Service.new({{ YOUR_GOOGLE_API_KEY }})
 
   get '/' do
     "Hello World!"
@@ -15,6 +13,10 @@ class PiParty < Sinatra::Base
 
   get '/play' do
     @@streamer.play
+  end
+
+  get '/next' do
+    @@streamer.next
   end
 
   get '/stop' do
