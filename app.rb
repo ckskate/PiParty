@@ -5,7 +5,7 @@ require_relative "service"
 class PiParty < Sinatra::Base
 
   @@streamer = Streamer.new
-  @@service = Service.new({{ YOUR_GOOGLE_API_KEY }})
+  @@service = Service.new({{ GOOGLE_API_CODE }})
 
   get '/' do
     "Hello World!"
@@ -15,13 +15,18 @@ class PiParty < Sinatra::Base
     @@streamer.play
   end
 
-  get '/next' do
-    @@streamer.next
+  get '/pause' do
+    @@streamer.pause
+    "toggled"
   end
 
   get '/stop' do
     @@streamer.stop
     "stopped"
+  end
+
+  get '/next' do
+    @@streamer.next
   end
 
   get '/search' do

@@ -15,9 +15,14 @@ class Streamer
           Process.waitpid(@process.pid)
         end
       end
-      "playing"
     end
     @track_list.first.inspect
+  end
+
+  def pause
+    File.open('pipe', 'w+') do |file|
+      file.puts "pause"
+    end
   end
 
   def stop
