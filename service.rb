@@ -8,10 +8,10 @@ class Service
   end
 
   def search(term)
-    @track_list = sanitize @youtube_service.list_searches('snippet', q: term,
-    max_results: 10).items
+    sanitize @youtube_service.list_searches('snippet', q: term).items
   end
 
+  # reject bad results and store in a more useful format.
   def sanitize(raw_results)
     raw_results.reject do |result|
       result.kind != "youtube#video"
@@ -19,7 +19,9 @@ class Service
     list = raw_results.map do |result|
       { title: result.snippet.title,
         image: result.snippet.thumbnails.high.url,
-        id: result.id.video_id }
+        id:    result.id.video_id }
     end
+    # only return top result (for queue).
+    list.first
   end
 end
