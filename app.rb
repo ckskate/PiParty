@@ -6,7 +6,7 @@ require_relative "service"
 class PiParty < Sinatra::Base
 
   @@streamer = Streamer.new
-  @@service = Service.new('AIzaSyCXrjoUfz7N5zY27c8PpDHVNk1SHm2vicM')
+  @@service = Service.new({{ GOOGLE_API_CODE }})
 
   set :bind, '0.0.0.0'
 

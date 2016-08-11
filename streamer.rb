@@ -13,7 +13,6 @@ class Streamer
         until @track_list.empty?
           track = @track_list.first
           @process = IO.popen("omxplayer -o both \"$(youtube-dl -g \"https://youtube.com/watch?v=#{track[:id]}\" | sed -n '2p')\"")
-          #@process = IO.popen("mpv \"$(youtube-dl -g \"https://youtube.com/watch?v=#{track[:id]}\" | sed -n '2p')\"")
 	  waitpid @process.pid
           @track_list.shift
         end
