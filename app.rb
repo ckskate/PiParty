@@ -6,7 +6,9 @@ require_relative "service"
 class PiParty < Sinatra::Base
 
   @@streamer = Streamer.new
-  @@service = Service.new({{ GOOGLE_API_CODE }})
+  @@service = Service.new('AIzaSyCXrjoUfz7N5zY27c8PpDHVNk1SHm2vicM')
+
+  set :bind, '0.0.0.0'
 
   get '/play' do
     @@streamer.play.to_json
@@ -33,7 +35,7 @@ class PiParty < Sinatra::Base
   end
 
   get '/next' do
-    @@streamer.next
+    @@streamer.next.to_json
   end
 
   get '/queue' do
@@ -41,7 +43,6 @@ class PiParty < Sinatra::Base
   end
 
   get '/queue/add' do
-    # @@streamer.stop
     if params[:q]
       res = @@service.search(params[:q])
       @@streamer.update_queue(res)

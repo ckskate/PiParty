@@ -12,11 +12,12 @@ class Streamer
       @thr = Thread.new do
         until @track_list.empty?
           track = @track_list.first
-          # @process = IO.popen("omxplayer -o both \"$(youtube-dl -g \"https://youtube.com/watch?v=#{@track[:id]}\" | sed -n '2p')\" < pipe")
-          @process = IO.popen("mpv \"$(youtube-dl -g \"https://youtube.com/watch?v=#{track[:id]}\" | sed -n '2p')\"")
-          waitpid @process.pid
+          @process = IO.popen("omxplayer -o both \"$(youtube-dl -g \"https://youtube.com/watch?v=#{track[:id]}\" | sed -n '2p')\"")
+          #@process = IO.popen("mpv \"$(youtube-dl -g \"https://youtube.com/watch?v=#{track[:id]}\" | sed -n '2p')\"")
+	  waitpid @process.pid
           @track_list.shift
         end
+	stop
       end
     end
     @track_list.first
@@ -30,8 +31,8 @@ class Streamer
 
   def stop
     if @process
-      kill('QUIT', @process.pid)
       @process = nil
+      `killall omxplayer.bin`
     end
     @thr.exit if @thr
   end
